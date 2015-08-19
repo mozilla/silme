@@ -5,7 +5,7 @@ import re
 
 class Parser():
     patterns = {}
-    patterns['entity'] = re.compile('^\s*(\S+)\s*=\s*((?:[\S ]+(?:\n(?=\s))?)+)',re.S|re.M)
+    patterns['entity'] = re.compile('^[ \t]*([^#!\s\n][^=:\n]*?)[ \t]*[:=][ \t]*(.*?)(?<!\\\)(?=\n|\Z)',re.S|re.M)
     patterns['comment'] = re.compile('^([;#][^\n]*\n?)+',re.M|re.S)
     patterns['section'] = re.compile('^\[([a-z]+)\]', re.S|re.M)
 
@@ -25,7 +25,7 @@ class Parser():
         for match in matchlist:
             entitylist.add(Entity(match[0], match[1]))
         return entitylist
-    
+
     @classmethod
     def parse_entity(cls, text):
         match = self.patterns['entity'].match(text)
@@ -62,7 +62,7 @@ class Parser():
         if (not end or (end > pointer)) and len(text) > pointer:
             cls.split_comments(text, struct, pointer=pointer, end=end)
 
-    
+
 
     @classmethod
     def split_comments(cls, text, object, pointer=0, end=None):
@@ -76,7 +76,7 @@ class Parser():
             if st0 > pointer:
                 cls.split_entities(text, object, pointer=pointer, end=st0)
             comment = Comment()
-            cls.split_entities(match.group(0)[1:].replace('\n;','\n'), comment)
+            comment.add(match.group(0)[1:].replace('\n;', '\n').replace('\n#', '\n'))
             object.append(comment)
             pointer = match.end(0)
             if end:

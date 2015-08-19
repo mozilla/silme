@@ -118,7 +118,7 @@ class Structure(list, Blob):
     def entities(self):
         """
         Returns a list of entities from the structure
-        """   
+        """
         return [item for item in self if is_entity(item)]
 
     def entitylist(self):
@@ -147,11 +147,16 @@ class Structure(list, Blob):
     def modify_entity(self, id, value):
         """modifies an entity value
         """
+        found = False
         for item in self:
             if is_entity(item) and item.id == id:
                 item.value = value
-                return True
-        raise KeyError('No such entity')
+                found = True
+
+        if found:
+            return True
+        else:
+            raise KeyError('No such entity')
 
     def entity(self, id):
         """returns an entity for a given id

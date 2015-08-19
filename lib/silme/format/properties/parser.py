@@ -25,7 +25,7 @@ class PropertiesParser():
         for match in matchlist:
             entitylist.add(Entity(match[0], match[1]))
         return entitylist
-    
+
     @classmethod
     def parse_entity(cls, text, code='default'):
         match = self.patterns['entity'].match(text)
@@ -52,7 +52,7 @@ class PropertiesParser():
                 cls.split_entities(text, object, code=code, pointer=pointer, end=st0)
             groups = match.groups()
             comment = Comment()
-            cls.split_entities(match.group(0)[1:].replace('\n#','\n'), comment, code=code)
+            comment.add(match.group(0)[1:].replace('\n#', '\n'))
             object.append(comment)
             pointer = match.end(0)
             if end:
