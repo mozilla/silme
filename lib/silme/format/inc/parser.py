@@ -11,7 +11,7 @@ class IncParser():
 
     @classmethod
     def parse(cls, text):
-        prop = IncStructure()
+        prop = IncStructure(id=None)
         cls.build_element_list(text, prop)
         return prop
 
@@ -24,7 +24,7 @@ class IncParser():
         for match in matchlist:
             entitylist.add(Entity(match[0], match[1]))
         return entitylist
-    
+
     @classmethod
     def parse_entity(cls, text):
         match = self.patterns['entity'].match(text)

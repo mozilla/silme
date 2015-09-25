@@ -1,4 +1,5 @@
 from parser import IncParser as Parser
+from serializer import IncSerializer as Serializer
 
 class FormatParser():
     name = 'inc'

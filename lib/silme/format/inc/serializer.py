@@ -5,10 +5,8 @@ import re
 
 class IncSerializer():
     @classmethod
-    def serialize(cls, l10nobject, fallback=None):
-        if not fallback:
-            fallback = l10nobject.fallback
-        string = u''.join([cls.dump_element(element, fallback) for element in l10nobject])
+    def serialize(cls, l10nobject):
+        string = u''.join([cls.dump_element(element) for element in l10nobject])
         return string
 
     @classmethod
