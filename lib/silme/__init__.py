@@ -1,4 +1,4 @@
-VERSION = (0, 9, 1, '', 0)
+VERSION = (0, 9, 2, '', 0)
 
 short_names = {
   'alpha': 'a',
