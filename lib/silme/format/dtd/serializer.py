@@ -22,11 +22,22 @@ class DTDSerializer():
     def dump_entity (cls, entity, fallback=None):
         if entity.params.has_key('source') and entity.params['source']['type']=='dtd':
             match = Parser.patterns['entity'].match(entity.params['source']['string'])
+
+            middle = entity.params['source']['string'][match.end(1):match.start(2)+1]
+            end = entity.params['source']['string'][match.end(2)-1:]
+
+            if middle.endswith('"') and '"' in entity.value:
+                middle = middle.replace('"', "'")
+                end = end.replace('"', "'")
+            elif middle.endswith("'") and "'" in entity.value:
+                middle = middle.replace("'", '"')
+                end = end.replace("'", '"')
+
             string = entity.params['source']['string'][0:match.start(1)]
             string += entity.id
-            string += entity.params['source']['string'][match.end(1):match.start(2)+1]
+            string += middle
             string += entity.value
-            string += entity.params['source']['string'][match.end(2)-1:]
+            string += end
         else:
             string = u'<!ENTITY '+entity.id+u' "'+entity.value+u'">'
         return string
