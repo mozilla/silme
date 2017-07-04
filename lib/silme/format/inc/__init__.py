@@ -1,7 +1,8 @@
-from parser import IncParser as Parser
-from serializer import IncSerializer as Serializer
+from .parser import IncParser as Parser
+from .serializer import IncSerializer as Serializer
 
-class FormatParser():
+
+class FormatParser(object):
     name = 'inc'
     desc = "INC reader/writer"
     extensions = ['inc']
