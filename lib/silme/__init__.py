@@ -19,6 +19,7 @@ def get_short_version():
         version = '%s%s' % (version, VERSION[4])
     return version
 
+
 def get_version():
     version = '%s.%s' % (VERSION[0], VERSION[1])
     if VERSION[2]:

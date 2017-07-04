@@ -50,7 +50,7 @@ class HgClient(RCSClient):
     @classmethod
     def _read_without_encoding(cls, path):
         repo = hg.repository(ui.ui(), 'http://hg.mozilla.org/webtools/mcs/')
-        print repo
+        print(repo)
         text = commands.cat(ui, repo, 'theme/html/index.html')
         #text = client.cat(path, revision=pysvn.Revision( pysvn.opt_revision_kind.head ))
         return text

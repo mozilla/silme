@@ -5,8 +5,10 @@ import os
 import MySQLdb
 import re
 
+
 def register(Manager):
     Manager.register(MysqlClient)
+
 
 class MysqlClient(DBClient):
     name = 'mysql'
@@ -20,7 +22,7 @@ class MysqlClient(DBClient):
         tests if the ioclient should be used for this type of path
         Matches any mysql://
         """
-        print path
+        print(path)
         return path.startswith('mysql://')
 
     @classmethod
@@ -96,10 +98,10 @@ class MysqlClient(DBClient):
         else:
             return 'object'
 
-#=======================================
+# =======================================
 
     @classmethod
-    #mysql://localhost/db?user=foo&password=foo2
+    # mysql://localhost/db?user=foo&password=foo2
     def _explode_path(cls, path):
         pattern = re.compile('^mysql://([^:\/]+):?([0-9]+)?\/?([^\?]+)?\??(.+)?')
         match = pattern.match(path)
@@ -118,7 +120,7 @@ class MysqlClient(DBClient):
             user = params.get('user') or ''
             password = params.get('password') or ''
             table = params.get('table') or None
-            return (host, port, db, user, password, table)
+            return host, port, db, user, password, table
         else:
             raise Exception('path is not parseable')
 
@@ -126,12 +128,9 @@ class MysqlClient(DBClient):
     def _connect(cls, path):
         if not cls._connected():
             (host, port, db, user, password, table) = cls._explode_path(path)
-            cls.connection = MySQLdb.connect(host = host,
-                                        port = port,
-                                        user = user,
-                                        passwd = password,
-                                        db = db,
-                                        use_unicode = True)
+            cls.connection = MySQLdb.connect(
+                host=host, port=port, user=user, passwd=password, db=db, use_unicode=True
+            )
 
     @classmethod
     def _close(cls):
