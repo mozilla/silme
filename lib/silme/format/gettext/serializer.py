@@ -22,7 +22,7 @@ class GettextSerializer:
 
     @classmethod
     def dump_entity(cls, entity):
-        if entity.params.has_key('source') and entity.params['source']['type']=='gettext':
+        if 'source' in entity.params and entity.params['source']['type']=='gettext':
             match = Parser.patterns['entity'].match(entity.params['source']['string'])
             string = entity.params['source']['string'][0:match.start(1)]
             string += entity.id
@@ -48,7 +48,7 @@ class GettextSerializer:
             else:
                 v += '"%s"' % line
             i+=1
-        return v 
+        return v
 
     @classmethod
     def dump_entitylist(cls, elist):
