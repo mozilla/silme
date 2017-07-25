@@ -39,7 +39,7 @@ def get_pos_from_prev_next(prev, next):
     for i in next:
         if is_entity(i):
             return ('before',i.id)
-    return None        
+    return None
 
 class StructureDiff(list):
     values = True
@@ -94,7 +94,7 @@ class StructureDiff(list):
                 pos = None
             for elem in chunks:
                 if is_entity(elem):
-                    if opposite.has_key(elem.id):
+                    if elem.id in opposite:
                         if self.values:
                             entitydiff = elem.diff(opposite[elem.id])
                             if not entitydiff.empty():
@@ -110,7 +110,7 @@ class StructureDiff(list):
 
         for i in self:
             if 'modified' in i['flags'] and isinstance(i['elements'][1], EntityDiff):
-                if i['elements'][1].has_key('value'):
+                if 'value' in i['elements'][1]:
                     modified[i['elements'][0]] = i['elements'][1]
                     modified[i['elements'][0]].params['diff_flags'] = i['flags']
                     modified[i['elements'][0]].params['diff_pos'] = None
@@ -121,7 +121,7 @@ class StructureDiff(list):
             elif 'replaced' in i['flags']:
                 _get_entities_of_type(i['elements'], 'removed')
                 _get_entities_of_type(i['elements2'], 'added', i)
-        
+
         entities = OrderedDict()
         if type == 'all' or 'modified' in type:
             entities.update(modified)

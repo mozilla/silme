@@ -20,7 +20,7 @@ class IncSerializer():
 
     @classmethod
     def dump_entity (cls, entity, fallback=None):
-        if entity.params.has_key('source') and entity.params['source']['type']=='properties':
+        if 'source' in entity.params and entity.params['source']['type']=='properties':
             match = Parser.patterns['entity'].match(entity.params['source']['string'])
             string = entity.params['source']['string'][0:match.start(1)]
             string += entity.id
