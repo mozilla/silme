@@ -4,7 +4,7 @@ import re
 
 class IncParser():
     patterns = {}
-    patterns['entity'] = re.compile('^#define[ \t]*([^ \t]+)[ \t]*(.*)',re.M)
+    patterns['entity'] = re.compile(r'#define[ \t]+(?P<key>\w+)(?:[ \t](?P<val>[^\n]*))?', re.M)
     patterns['comment'] = re.compile('^(# [^\n]*\n?)+',re.M)
 #define firefox_about About Us
 
@@ -74,7 +74,7 @@ class IncParser():
                 object.append(text[pointer:st0])
             groups = match.groups()
             entity = Entity(groups[0])
-            entity.set_value(groups[1])
+            entity.set_value(groups[1] or '')
             entity.params['source'] = {'type':'inc',
                                         'string':match.group(0),
                                         'valpos':match.start(2)-st0}
