@@ -23,7 +23,7 @@ class Serializer():
 
     @classmethod
     def dump_entity(cls, entity):
-        if entity.params.has_key('source') and entity.params['source']['type']=='ini':
+        if 'source' in entity.params and entity.params['source']['type']=='ini':
             match = Parser.patterns['entity'].match(entity.params['source']['string'])
             string = entity.params['source']['string'][0:match.start(1)]
             string += entity.id

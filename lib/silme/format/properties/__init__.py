@@ -1,7 +1,13 @@
+import sys
 from .parser import PropertiesParser as Parser
 from .serializer import PropertiesSerializer as Serializer
 
-class FormatParser():
+if sys.version_info[0] > 2:
+    # for python3
+    unichr = chr
+
+
+class FormatParser(object):
     name = 'properties'
     desc = "Java Properties reader/writer"
     extensions = ['properties']

@@ -8,7 +8,7 @@ def intersect(a, b):
 
 def difference(a, b):
     """ returns what's in b and not in a """
-    return [item for item in b if not item in a] 
+    return [item for item in b if item not in a]
 
 class EntityListDiff(ComplexDict):
     count = 0
@@ -36,12 +36,12 @@ class EntityListDiff(ComplexDict):
             raise KeyError('No such id: %s' % id)
 
     def has_entity(self, id):
-        return self.has_key(id)
+        return id in self
 
     def entities(self, type='all'):
         entities = {}
-        for id,item in self.items():
-            if type=='all' or type in item['flags']:
+        for id, item in self.items():
+            if type == 'all' or type in item['flags']:
                 entities[item['elem'].id] = item['elem']
         return entities
 
@@ -65,7 +65,7 @@ def entitylist_diff(self, elists, flags=None, values=True):
 
 def entitylist_diff2 (self, entitylist, flags=None, values=True):
     if flags == None:
-        flags = ['added','removed','modified']
+        flags = ['added', 'removed', 'modified']
     entitylistdiff = EntityListDiff(self.id, ordered=self.ordered)
     entitylistdiff.uri = (self.uri, entitylist.uri)
     if not is_entitylist(entitylist):

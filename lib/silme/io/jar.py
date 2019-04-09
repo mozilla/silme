@@ -26,7 +26,7 @@ class JarClient(FileFormatClient):
         return path.startswith('jar:') or path.endswith('.jar')
 
     @classmethod
-    def get_blob(cls, path, source=True):
+    def get_blob(cls, path, uri=None, source=True):
         (p, j, i) = cls._explode_path(path)
         return super(JarClient, cls).get_blob(path, uri=i, source=source)
 
@@ -54,7 +54,7 @@ class JarClient(FileFormatClient):
         if not cls.zfile:
             try:
                 cls._open_jar(jarpath)
-            except Exception,e:
+            except Exception as e:
                 raise Exception('Could not load a jar file: ' + jarpath + ': ' + str(e))
             # @var jar_open_stat: We need to know if the JAR-file was already open
             jar_open_stat = False
@@ -75,17 +75,21 @@ class JarClient(FileFormatClient):
 
             try:
                 parser = Manager.get(path=filename)
-            except KeyError, e:
+            except KeyError as e:
                 l10npackage.add_structure(cls.get_blob(name, source=True), relpath)
             else:
-                if object_type=='blob':
+                if object_type == 'blob':
                     l10npackage.add_structure(cls.get_blob(name, source=True), relpath)
-                elif object_type=='list':
-                    l10npackage.add_structure(cls.get_entitylist(name, source=source,
-                                            parser=parser), relpath)
+                elif object_type == 'list':
+                    l10npackage.add_structure(cls.get_entitylist(
+                        name, source=source,
+                        parser=parser), relpath
+                    )
                 else:
-                    l10npackage.add_structure(cls.get_structure(name, source=source,
-                                            parser=parser), relpath)
+                    l10npackage.add_structure(cls.get_structure(
+                        name, source=source,
+                        parser=parser), relpath
+                    )
         # close the JAR-file only, if it was opened in this method
         if not jar_open_stat:
             cls._close_jar()
@@ -93,10 +97,7 @@ class JarClient(FileFormatClient):
 
     @classmethod
     def write_blob(cls, blob, path):
-        cls.write_source(blob.source,
-                        path,
-                        blob.id,
-                        encoding=None)
+        cls.write_source(blob.source, path, blob.id, encoding=None)
 
     @classmethod
     def write_entitylist(cls, elist, path, encoding=None):
@@ -107,25 +108,19 @@ class JarClient(FileFormatClient):
         except KeyError:
             raise Exception('No parser for given object type')
         string = format_parser.dump_entitylist(elist)
-        cls.write_source(string,
-                        path,
-                        elist.id,
-                        encoding)
+        cls.write_source(string, path, elist.id, encoding)
         return True
 
     @classmethod
-    def write_structure(cls, object, path, encoding=None):
-        if encoding is None and hasattr(object, 'encoding'):
-            encoding = object.encoding
+    def write_structure(cls, obj, path, encoding=None):
+        if encoding is None and hasattr(obj, 'encoding'):
+            encoding = obj.encoding
         try:
-            format_parser = Manager.get(path=object.id)
+            format_parser = Manager.get(path=obj.id)
         except KeyError:
-            raise Exception('No parser for given object type ('+object.id+')')
-        string = format_parser.dump_structure(object)
-        cls.write_source(string,
-                        path,
-                        object.id,
-                        format_parser.encoding)
+            raise Exception('No parser for given object type (' + obj.id + ')')
+        string = format_parser.dump_structure(obj)
+        cls.write_source(string, path, obj.id, format_parser.encoding)
         return True
 
     @classmethod

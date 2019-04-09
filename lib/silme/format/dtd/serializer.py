@@ -20,7 +20,7 @@ class DTDSerializer():
 
     @classmethod
     def dump_entity (cls, entity, fallback=None):
-        if entity.params.has_key('source') and entity.params['source']['type']=='dtd':
+        if 'source' in entity.params and entity.params['source']['type']=='dtd':
             match = Parser.patterns['entity'].match(entity.params['source']['string'])
 
             middle = entity.params['source']['string'][match.end(1):match.start(2)+1]

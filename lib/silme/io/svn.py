@@ -3,16 +3,15 @@ from silme.core import Blob
 from silme.io.clients import IOClient, RCSClient
 import silme.format
 from silme.core import L10nPackage
-from file import FileClient
 
 import pysvn
 import os
-import shutil
-import codecs
 import re
+
 
 def register(Manager):
     Manager.register(SVNClient)
+
 
 class SVNClient (RCSClient):
     name = 'svn'
@@ -20,7 +19,7 @@ class SVNClient (RCSClient):
     type = IOClient.__name__
     client = None
 
-    def __init__ (self):
+    def __init__(self):
         self.user = {'login':None, 'password':None}
 
     @classmethod

@@ -8,7 +8,7 @@ def process_entity(entity, subs):
                                      entity._value[code])
 
 def process(self):
-    if not self.params.has_key('exents') or \
+    if 'exents' not in self.params or \
        not self.params['exents']:
         return
     for elem in self:

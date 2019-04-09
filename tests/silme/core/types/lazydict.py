@@ -435,7 +435,7 @@ class LazyDictTestCase(unittest.TestCase):
         #for stmt in ['d[x2] = 2',
         #             'z = d[x2]',
         #             'x2 in d',
-        #             'd.has_key(x2)',
+        #             'x2 in d',
         #             'd.get(x2)',
         #             'd.setdefault(x2, 42)',
         #             'd.pop(x2)',
@@ -598,7 +598,7 @@ class LazyDictTestCase(unittest.TestCase):
 
     def test_lazy_get(self):
         d = LazyDict({'a': 1, 'b': 2})
-        d.set_stub('d', lambda x:x)        
+        d.set_stub('d', lambda x:x)
         self.assertIs(d.get('c'), None)
         self.assertEqual(d.get('c', 3), 3)
         self.assertEqual(d.get('a'), 1)

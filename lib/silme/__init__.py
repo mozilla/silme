@@ -1,4 +1,4 @@
-VERSION = (0, 9, 4, '', 0)
+VERSION = (0, 10, 0, '', 0)
 
 short_names = {
   'alpha': 'a',
@@ -18,6 +18,7 @@ def get_short_version():
     if VERSION[3] not in ('pre', 'final') and VERSION[4]:
         version = '%s%s' % (version, VERSION[4])
     return version
+
 
 def get_version():
     version = '%s.%s' % (VERSION[0], VERSION[1])
