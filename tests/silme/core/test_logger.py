@@ -1,7 +1,6 @@
 import random
 import unittest
 import sys
-sys.path.append('./lib')
 
 import silme.core
 import silme.core.logger
@@ -29,6 +28,3 @@ class EntityTestCase(unittest.TestCase):
         package2.add_structure(self.entitylist)
         package.add_package(package2)
         self.assertEqual(len(package.get_logs(recursive=True)), 3)
-
-if __name__ == '__main__':
-    unittest.main()

@@ -1,6 +1,5 @@
 import unittest
 import sys
-sys.path.append('./lib')
 
 from silme.core.types.lazydict import LazyDict
 
@@ -663,6 +662,3 @@ class LazyDictTestCase(unittest.TestCase):
         del d['1']
         self.assertEqual(len(d), 1)
         self.assertRaises(KeyError, d.__getitem__, '1')
-
-if __name__ == '__main__':
-    unittest.main()

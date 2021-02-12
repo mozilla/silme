@@ -1,7 +1,6 @@
 import random
 import unittest
 import sys
-sys.path.append('./lib')
 
 import silme.core
 
@@ -20,21 +19,21 @@ class EntityTestCase(unittest.TestCase):
         entity1 = silme.core.Entity('x')
         entity2 = silme.core.Entity('y')
         self.entity_list = silme.core.EntityList('test', entity1, entity2)
-        self.assertEquals(self.entity_list['x'], entity1)
-        self.assertEquals(self.entity_list['y'], entity2)
+        self.assertEqual(self.entity_list['x'], entity1)
+        self.assertEqual(self.entity_list['y'], entity2)
 
     def test_init4(self):
         entity1 = silme.core.Entity('x')
         entity2 = silme.core.Entity('y')
         entity_list = silme.core.EntityList('test', entity1, entity2)
         self.entity_list = silme.core.EntityList('id2', entity_list)
-        self.assertEquals(self.entity_list['x'], entity1)
-        self.assertEquals(self.entity_list['y'], entity2)
+        self.assertEqual(self.entity_list['x'], entity1)
+        self.assertEqual(self.entity_list['y'], entity2)
     
     def test_has_entity1(self):
         entity1 = silme.core.Entity('x')
         self.entity_list.add(entity1)
-        self.assertEquals('x' in self.entity_list, True)
+        self.assertEqual('x' in self.entity_list, True)
 
     def test_get_entities1(self):
         entity1 = silme.core.Entity('x')
@@ -42,8 +41,8 @@ class EntityTestCase(unittest.TestCase):
         self.entity_list.add(entity1)
         self.entity_list.add(entity2)
         l = self.entity_list.entities()
-        self.failUnless(l[0].id in ('x', 'y'))
-        self.failUnless(l[1].id in ('x', 'y'))
+        self.assertTrue(l[0].id in ('x', 'y'))
+        self.assertTrue(l[1].id in ('x', 'y'))
         self.assertNotEqual(l[0].id, l[1].id)
 
     def test_iter_entities(self):
@@ -54,7 +53,7 @@ class EntityTestCase(unittest.TestCase):
         self.entity_list.add(entity2)
         self.entity_list.add(entity3)
         for id in self.entity_list:
-            self.failUnless(id in ('x','y','z'))
+            self.assertTrue(id in ('x','y','z'))
 
     def test_entity_ids1(self):
         entity1 = silme.core.Entity('x')
@@ -126,6 +125,3 @@ class EntityTestCase(unittest.TestCase):
         vlist = silme.core.list.ValueList('test')
         vlist.add(silme.core.Entity('id1', 'Foo1'))
         self.assertRaises(TypeError, vlist.entities)
-
-if __name__ == '__main__':
-    unittest.main()
