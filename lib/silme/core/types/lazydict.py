@@ -23,7 +23,7 @@ Example:
 
 '''
 from functools import partial
-from collections import MutableMapping, ItemsView, ValuesView
+from collections.abc import MutableMapping, ItemsView, ValuesView
 import datetime
 
 __all__ = ["LazyDict",]

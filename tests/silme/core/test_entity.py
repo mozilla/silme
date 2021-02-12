@@ -1,6 +1,5 @@
 import unittest
 import sys
-sys.path.append('./lib')
 
 from silme.core.entity import Entity, ComplexValue
 from silme.core.types import OrderedDict
@@ -59,15 +58,15 @@ class EntityTestCase(unittest.TestCase):
 
     def test_dict1(self):
         self.entity = Entity('test', {'male':'Foo','female':'Foo2'})
-        self.failUnless(self.entity.value in ('Foo', 'Foo2'))
+        self.assertTrue(self.entity.value in ('Foo', 'Foo2'))
 
     def test_dict2(self):
         self.entity.value = {'male':'Foo','female':'Foo2'}
-        self.failUnless(self.entity.value in ('Foo', 'Foo2'))
+        self.assertTrue(self.entity.value in ('Foo', 'Foo2'))
 
     def test_dict3(self):
         self.entity.value = {'male':'Foo','female':'Foo2'}
-        self.failUnless(self.entity.get_value() in ('Foo', 'Foo2'))
+        self.assertTrue(self.entity.get_value() in ('Foo', 'Foo2'))
 
     def test_dict4(self):
         self.entity.value = {'male':'Foo','female':'Foo2'}
@@ -118,7 +117,6 @@ class EntityTestCase(unittest.TestCase):
         self.entity.value = ComplexValue(['Foo3','Foo4'])
         self.assertEqual(self.entity.value, 'Foo3')
         self.entity.value = ComplexValue(OrderedDict((('one','Foo5'),('few','Foo6'),('many','Foo7'))))
-        print type(self.entity.values)
         self.assertEqual(self.entity.value, 'Foo5')
 
     def test_custom1(self):
@@ -141,7 +139,3 @@ class EntityTestCase(unittest.TestCase):
         #x.pop()
         #self.assertEqual(x, vals)
         #self.assertNotEqual(self.entity.values, x)
-
-
-if __name__ == '__main__':
-    unittest.main()

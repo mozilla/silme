@@ -2,7 +2,6 @@ import random
 import unittest
 import sys
 import re
-sys.path.append('./lib')
 
 import silme.core
 
@@ -139,7 +138,7 @@ class structureTestCase(unittest.TestCase):
 
     def test_process(self):
         def process_entity(entity, subs):
-            entity.value = re.sub('\&([^$]+)\;',
+            entity.value = re.sub(r'\&([^$]+)\;',
                                   lambda m:subs[m.group(1)],
                                   str(entity.value))
         def process(self):
@@ -153,6 +152,3 @@ class structureTestCase(unittest.TestCase):
         self.structure.add_entity(entity1)
         self.structure.process()
         self.assertEqual(self.structure.value('id'), 'Test Woo it')
-
-if __name__ == '__main__':
-    unittest.main()

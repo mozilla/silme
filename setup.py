@@ -5,9 +5,6 @@ New library for localization written in Python.
 
 docstrings = __doc__.split("\n")
 
-import ez_setup
-ez_setup.use_setuptools()
-
 from setuptools import setup, find_packages
 import sys
 import os.path
@@ -22,8 +19,10 @@ License :: OSI Approved :: GNU General Public License (GPL)
 License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
 License :: OSI Approved :: Mozilla Public License 1.1 (MPL 1.1)
 Operating System :: OS Independent
-Programming Language :: Python :: 2.5
-Programming Language :: Python :: 2.6
+Programming Language :: Python :: 3.6
+Programming Language :: Python :: 3.7
+Programming Language :: Python :: 3.8
+Programming Language :: Python :: 3.9
 Topic :: Software Development :: Libraries :: Python Modules
 Topic :: Software Development :: Localization
 """
@@ -35,10 +34,10 @@ setup(name="silme",
       description=docstrings[0],
       long_description="\n".join(docstrings[2:]),
       license="MPL 1.1/GPL 2.0/LGPL 2.1",
-      url="http://hg.mozilla.org/l10n/silme/",
+      url="https://github.com/mathjazz/silme",
       classifiers=filter(None, classifiers.split("\n")),
       platforms=["any"],
       package_dir={'': 'lib'},
       packages=find_packages('lib'),
-      keywords="localization, l10n, l20n"
+      keywords="localization, l10n"
       )

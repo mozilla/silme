@@ -1,7 +1,6 @@
 import random
 import unittest
 import sys
-sys.path.append('./lib')
 
 import silme.core
 
@@ -143,6 +142,3 @@ class EntityTestCase(unittest.TestCase):
         self.assertEqual(pack.has_package('id1'), True)
         self.assertEqual(pack.package('id1').id, 'id1')
         self.assertEqual(len(pack._packages._stubs), 0)
-
-if __name__ == '__main__':
-    unittest.main()
