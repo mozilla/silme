@@ -1,10 +1,11 @@
 from silme.core.structure import Structure as BaseStructure, Comment
 from silme.core.entity import is_string, is_entity
 
+
 class Structure(BaseStructure):
     def __init__(self, id):
         BaseStructure.__init__(self, id)
-        self.first_section = False     # did we encounter sections?
+        self.first_section = False  # did we encounter sections?
 
     def add(self, item, pos=None):
         """adds an element (string, entity or comment) to the Structure
@@ -25,16 +26,18 @@ class Structure(BaseStructure):
         elif item is None:
             return 0
         else:
-            raise Exception('Cannot add element of type "' +
-                            type(item).__name__ +
-                            '" to the Structure')
+            raise Exception(
+                'Cannot add element of type "'
+                + type(item).__name__
+                + '" to the Structure'
+            )
 
     def add_section(self, section, pos=None):
         pos = self._get_pos(pos)
         if pos is None:
             self.first_section = len(self)
         elif self.first_section is False or self.first_section < pos:
-            self.first_section = pos      
+            self.first_section = pos
         self.add_at_pos(section, pos)
         return 1
 
@@ -45,8 +48,9 @@ class Structure(BaseStructure):
            ('before', 'entity.id'), ('after', 'entity.id')
         """
         pos = self._get_pos(pos)
-        if self.first_section is not False and \
-           (pos is None or pos > self.first_section):
+        if self.first_section is not False and (
+            pos is None or pos > self.first_section
+        ):
             raise Exception("Cannot add entity after section")
         self.add_at_pos(entity, pos)
         return 1
@@ -65,8 +69,7 @@ class Structure(BaseStructure):
                 raise KeyError("No such entity or section")
 
     def __contains__(self, id):
-        """returns True if an entity with given id exists
-        """
+        """returns True if an entity with given id exists"""
         for item in self:
             if is_entity(item) and item.id == id:
                 return True
@@ -75,12 +78,11 @@ class Structure(BaseStructure):
         return False
 
     def section(self, key):
-        """returns a section for a given id
-        """
+        """returns a section for a given id"""
         for item in self:
             if isinstance(item, Section) and item.id == key:
                 return item
-        raise KeyError('No such section')
+        raise KeyError("No such section")
 
 
 class Section(Structure):
@@ -103,7 +105,8 @@ class Section(Structure):
         elif item is None:
             return 0
         else:
-            raise Exception('Cannot add element of type "' +
-                            type(item).__name__ +
-                            '" to the Structure')
-
+            raise Exception(
+                'Cannot add element of type "'
+                + type(item).__name__
+                + '" to the Structure'
+            )

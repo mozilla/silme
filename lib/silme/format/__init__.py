@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 class Manager(object):
     formats = {}
     names = {}
@@ -9,7 +10,7 @@ class Manager(object):
     @classmethod
     def _import(cls, fp):
         added = list(set(cls.path).difference(sys.path))
-        sys.path = added + sys.path # we want to have the locally added in front
+        sys.path = added + sys.path  # we want to have the locally added in front
         module = __import__(fp, globals(), locals(), [], 1)
         sys.path = list(set(sys.path).difference(added))
         return module
@@ -40,9 +41,9 @@ class Manager(object):
             try:
                 module = cls._import(name)
                 module.register(cls)
-            except:
+            except Exception:
                 pass
-    
+
     @classmethod
     def get(cls, name=None, path=None):
         if name:
@@ -52,11 +53,11 @@ class Manager(object):
                 try:
                     module = cls._import(name)
                 except ImportError:
-                    raise KeyError ('no matching format')
+                    raise KeyError("no matching format")
                 return module.FormatParser()
         elif path:
             try:
                 return cls.formats[os.path.splitext(path)[1][1:].lower()]
             except KeyError:
                 pass
-        raise KeyError('no matching parser')
+        raise KeyError("no matching parser")

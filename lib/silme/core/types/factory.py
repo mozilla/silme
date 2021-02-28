@@ -3,14 +3,16 @@ from silme.core.types import LazyDict as LazyDict
 
 from abc import ABCMeta
 
+
 class FactoryMeta(type):
     def __new__(cls, *args, **kwargs):
         return cls
 
+
 _types = {
-    'ordered': [OrderedDict, 'Ordered', False],
-    'lazy': [LazyDict, 'Lazy', False],
-    }
+    "ordered": [OrderedDict, "Ordered", False],
+    "lazy": [LazyDict, "Lazy", False],
+}
 
 
 class LazyDictMeta(ABCMeta, type):
@@ -25,15 +27,13 @@ class LazyDictMeta(ABCMeta, type):
                 classes.append(t[0])
                 name.append(t[1])
             attrs.append((key, r))
-        t = type('%s%s' % (''.join(name), cls.__name__),
-                 tuple(classes),
-                 {})
+        t = type("%s%s" % ("".join(name), cls.__name__), tuple(classes), {})
         cl = t.__new__(t, *args, **kwargs)
         cl.__init__(*args, **kwargs)
         for attr in attrs:
             setattr(cl, attr[0], attr[1])
         return cl
 
-# metaclass for py2 and py3
-ComplexDict = LazyDictMeta('ComplexDict', (dict, ), {})
 
+# metaclass for py2 and py3
+ComplexDict = LazyDictMeta("ComplexDict", (dict,), {})

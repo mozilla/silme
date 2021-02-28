@@ -2,12 +2,14 @@ from ...core import EntityList, Entity, Comment
 from .structure import IncStructure
 import re
 
-class IncParser():
-    patterns = {}
-    patterns['entity'] = re.compile(r'#define[ \t]+(?P<key>\w+)(?:[ \t](?P<val>[^\n]*))?', re.M)
-    patterns['comment'] = re.compile('^(# [^\n]*\n?)+',re.M)
-#define firefox_about About Us
 
+class IncParser:
+    patterns = {}
+    patterns["entity"] = re.compile(
+        r"#define[ \t]+(?P<key>\w+)(?:[ \t](?P<val>[^\n]*))?", re.M
+    )
+    patterns["comment"] = re.compile("^(# [^\n]*\n?)+", re.M)
+    # define firefox_about About Us
 
     @classmethod
     def parse(cls, text):
@@ -19,15 +21,15 @@ class IncParser():
     @classmethod
     def parse_to_entitylist(cls, text):
         entitylist = EntityList(id=None)
-        text = cls.patterns['comment'].sub('', text)
-        matchlist = cls.patterns['entity'].findall(text)
+        text = cls.patterns["comment"].sub("", text)
+        matchlist = cls.patterns["entity"].findall(text)
         for match in matchlist:
             entitylist.add(Entity(match[0], match[1]))
         return entitylist
 
     @classmethod
     def parse_entity(cls, text):
-        match = self.patterns['entity'].match(text)
+        match = cls.patterns["entity"].match(text)
         if not match:
             raise Exception()
         entity = Entity(match.group(1))
@@ -35,12 +37,12 @@ class IncParser():
         return entity
 
     @classmethod
-    def build_element_list (cls, text, object, type='comment', pointer=0, end=None):
+    def build_element_list(cls, text, object, type="comment", pointer=0, end=None):
         cls.split_comments(text, object)
 
     @classmethod
     def split_comments(cls, text, object, pointer=0, end=None):
-        pattern = cls.patterns['comment']
+        pattern = cls.patterns["comment"]
         if end:
             match = pattern.search(text, pointer, end)
         else:
@@ -49,9 +51,8 @@ class IncParser():
             st0 = match.start(0)
             if st0 > pointer:
                 cls.split_entities(text, object, pointer=pointer, end=st0)
-            groups = match.groups()
             comment = Comment()
-            cls.split_entities(match.group(0)[2:].replace('\n# ','\n'), comment)
+            cls.split_entities(match.group(0)[2:].replace("\n# ", "\n"), comment)
             object.append(comment)
             pointer = match.end(0)
             if end:
@@ -63,7 +64,7 @@ class IncParser():
 
     @classmethod
     def split_entities(cls, text, object, pointer=0, end=None):
-        pattern = cls.patterns['entity']
+        pattern = cls.patterns["entity"]
         if end:
             match = pattern.search(text, pointer, end)
         else:
@@ -74,10 +75,12 @@ class IncParser():
                 object.append(text[pointer:st0])
             groups = match.groups()
             entity = Entity(groups[0])
-            entity.set_value(groups[1] or '')
-            entity.params['source'] = {'type':'inc',
-                                        'string':match.group(0),
-                                        'valpos':match.start(2)-st0}
+            entity.set_value(groups[1] or "")
+            entity.params["source"] = {
+                "type": "inc",
+                "string": match.group(0),
+                "valpos": match.start(2) - st0,
+            }
             object.append(entity)
             pointer = match.end(0)
             if end:
