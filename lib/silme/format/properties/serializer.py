@@ -7,7 +7,7 @@ import re
 class PropertiesSerializer:
     @classmethod
     def serialize(cls, l10nobject):
-        string = u"".join([cls.dump_element(element) for element in l10nobject])
+        string = "".join([cls.dump_element(element) for element in l10nobject])
         return string
 
     @classmethod
@@ -32,17 +32,17 @@ class PropertiesSerializer:
             string += entity.value
             string += entity.params["source"]["string"][match.end(2) :]
         else:
-            string = entity.id + u" = " + entity.value
+            string = entity.id + " = " + entity.value
         return string
 
     @classmethod
     def dump_entitylist(cls, elist):
-        string = u"".join([cls.dump_entity(entity) + "\n" for entity in elist.values()])
+        string = "".join([cls.dump_entity(entity) + "\n" for entity in elist.values()])
         return string
 
     @classmethod
     def dump_comment(cls, comment):
-        string = u""
+        string = ""
         for element in comment:
             string += cls.dump_element(element)
         if string:

@@ -29,7 +29,7 @@ def is_entity(v):
     return isinstance(v, Entity)
 
 
-class Value(object):
+class Value:
     def __new__(cls, *args, **kwargs):
         # if cls is not Value:
         #    return object.__new__(cls)
@@ -115,7 +115,7 @@ class DictValue(OrderedDict, ComplexValue):
         return list(self.values())[0]
 
 
-class Entity(object):
+class Entity:
     """
     An entity is a basic localization data unit with a unique id and a value
 

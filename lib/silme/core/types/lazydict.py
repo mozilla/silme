@@ -49,35 +49,33 @@ class LazyDict(dict):
 
     def __init__(self, *args, **kwargs):
         self._stubs = set()
-        super(LazyDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __cmp__(self, other):
         self.resolve()
-        return super(LazyDict, self).__cmp__(other)
+        return super().__cmp__(other)
 
     def __eq__(self, other):
         self.resolve()
-        return super(LazyDict, self).__eq__(other)
+        return super().__eq__(other)
 
     def __setitem__(self, key, item):
         self._stubs.discard(key)
-        super(LazyDict, self).__setitem__(key, item)
+        super().__setitem__(key, item)
 
     def __getitem__(self, key):
         if key in self._stubs:
-            super(LazyDict, self).__setitem__(
-                key, super(LazyDict, self).__getitem__(key)()
-            )
+            super().__setitem__(key, super().__getitem__(key)())
             self._stubs.remove(key)
-        return super(LazyDict, self).__getitem__(key)
+        return super().__getitem__(key)
 
     def __delitem__(self, key):
         self._stubs.discard(key)
-        super(LazyDict, self).__delitem__(key)
+        super().__delitem__(key)
 
     def clear(self):
         self._stubs.clear()
-        super(LazyDict, self).clear()
+        super().clear()
 
     def copy(self):
         x = self.__class__(self)
@@ -120,14 +118,14 @@ class LazyDict(dict):
         """
         self._stubs.add(key)
         v = partial(rslv if rslv else self._resolver, key, *args, **kwargs)
-        super(LazyDict, self).__setitem__(key, v)
+        super().__setitem__(key, v)
 
     def resolve(self):
         """
         Resolves all stubs
         """
         for k in self._stubs:
-            super(LazyDict, self).__setitem__(k, super(LazyDict, self).__getitem__(k)())
+            super().__setitem__(k, super().__getitem__(k)())
         self._stubs.clear()
 
     def set_resolver(self, resolver):

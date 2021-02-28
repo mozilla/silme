@@ -27,7 +27,7 @@ class EntityList(ComplexDict):
 
     def __init__(self, id, *args, **kwargs):
         self.id = id
-        super(EntityList, self).__init__()
+        super().__init__()
         for i in args:
             if is_entitylist(i):
                 for entity in i.entities():
@@ -37,8 +37,8 @@ class EntityList(ComplexDict):
 
     def __repr__(self):
         if not self:
-            return "%s()" % (self.__class__.__name__,)
-        return "%s(%r)" % (self.__class__.__name__, tuple(self.keys()))
+            return f"{self.__class__.__name__}()"
+        return "{}({!r})".format(self.__class__.__name__, tuple(self.keys()))
 
     def add(self, entity):
         """Adds new entity to EntityList"""
@@ -66,7 +66,7 @@ class ValueList(EntityList):
     """
 
     def __init__(self, id, *args, **kwargs):
-        super(ValueList, self).__init__(id, *args, **kwargs)
+        super().__init__(id, *args, **kwargs)
 
     def add(self, entity):
         """Adds new entity to the ValueList"""

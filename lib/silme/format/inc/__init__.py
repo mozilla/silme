@@ -2,7 +2,7 @@ from .parser import IncParser as Parser
 from .serializer import IncSerializer as Serializer
 
 
-class FormatParser(object):
+class FormatParser:
     name = "inc"
     desc = "INC reader/writer"
     extensions = ["inc"]

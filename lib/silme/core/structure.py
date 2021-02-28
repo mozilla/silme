@@ -21,7 +21,7 @@ from silme.core.list import EntityList
 from functools import partial
 
 
-class Blob(object):
+class Blob:
     """
     A Blob is a data stream that is not localizable, but may be
     a part of a package of structures.
@@ -41,7 +41,7 @@ class Blob(object):
         self.id = id
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__, self.id)
+        return f"{self.__class__.__name__}({self.id})"
 
 
 class Structure(list, Blob):
@@ -131,8 +131,8 @@ class Structure(list, Blob):
         """Returns a dict of all entities from the Structure in a form of
         d[entity.id] = (entity, path)
         """
-        spath = "%s/%s" % (path_prefix, self.id) if path_prefix else self.id
-        return dict([(item.id, (item, spath)) for item in self if is_entity(item)])
+        spath = f"{path_prefix}/{self.id}" if path_prefix else self.id
+        return {item.id: (item, spath) for item in self if is_entity(item)}
 
     def __contains__(self, id):
         """returns True if an entity with given id exists"""
@@ -176,7 +176,7 @@ class Structure(list, Blob):
             if is_entity(item) and item.id == id:
                 del self[i]
                 return True
-        raise KeyError("[%s] No such entity: %s" % (self.id, id))
+        raise KeyError(f"[{self.id}] No such entity: {id}")
 
     def add_comment(self, comment, pos=None):
         self.add_at_pos(comment, pos)

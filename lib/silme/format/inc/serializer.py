@@ -31,14 +31,14 @@ class IncSerializer:
             string += entity.get_value(fallback)
             string += entity.params["source"]["string"][match.end(2) :]
         else:
-            string = u"#define %s %s" % (entity.id, entity.get_value(fallback))
+            string = "#define {} {}".format(entity.id, entity.get_value(fallback))
         return string
 
     @classmethod
     def dump_entitylist(cls, elist, fallback=None):
         if not fallback:
             fallback = elist.fallback
-        string = u"".join(
+        string = "".join(
             [
                 cls.dump_entity(entity, fallback) + "\n"
                 for entity in elist.get_entities()
@@ -48,7 +48,7 @@ class IncSerializer:
 
     @classmethod
     def dump_comment(cls, comment):
-        string = u""
+        string = ""
         for element in comment:
             string += cls.dump_element(element)
         if string:

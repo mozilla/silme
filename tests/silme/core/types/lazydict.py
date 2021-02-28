@@ -74,7 +74,7 @@ class LazyDictTestCase(unittest.TestCase):
 
         self.assertRaises(TypeError, d.__getitem__)
 
-        class BadEq(object):
+        class BadEq:
             def __eq__(self, other):
                 raise Exc()
 
@@ -88,7 +88,7 @@ class LazyDictTestCase(unittest.TestCase):
         class Exc(Exception):
             pass
 
-        class BadHash(object):
+        class BadHash:
             fail = False
 
             def __hash__(self):
@@ -195,7 +195,7 @@ class LazyDictTestCase(unittest.TestCase):
 
         self.assertRaises(Exc, d.update, FailingUserDict())
 
-        class badseq(object):
+        class badseq:
             def __iter__(self):
                 return self
 
@@ -291,7 +291,7 @@ class LazyDictTestCase(unittest.TestCase):
         class Exc(Exception):
             pass
 
-        class BadHash(object):
+        class BadHash:
             fail = False
 
             def __hash__(self):
@@ -360,7 +360,7 @@ class LazyDictTestCase(unittest.TestCase):
         class Exc(Exception):
             pass
 
-        class BadHash(object):
+        class BadHash:
             fail = False
 
             def __hash__(self):
@@ -558,7 +558,7 @@ class LazyDictTestCase(unittest.TestCase):
 
         self.assertRaises(TypeError, d.__getitem__)
 
-        class BadEq(object):
+        class BadEq:
             def __eq__(self, other):
                 raise Exc()
 
@@ -572,7 +572,7 @@ class LazyDictTestCase(unittest.TestCase):
         class Exc(Exception):
             pass
 
-        class BadHash(object):
+        class BadHash:
             fail = False
 
             def __hash__(self):

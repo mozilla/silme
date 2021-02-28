@@ -2,7 +2,7 @@ import os
 import sys
 
 
-class Manager(object):
+class Manager:
     formats = {}
     names = {}
     path = []

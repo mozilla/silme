@@ -7,7 +7,7 @@ if sys.version_info[0] > 2:
     unichr = chr
 
 
-class FormatParser(object):
+class FormatParser:
     name = "properties"
     desc = "Java Properties reader/writer"
     extensions = ["properties"]

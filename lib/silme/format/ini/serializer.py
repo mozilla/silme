@@ -55,5 +55,5 @@ class Serializer:
 
     @classmethod
     def dump_section(cls, section):
-        string = "[%s]%s" % (section.id, cls.serialize(section))
+        string = "[{}]{}".format(section.id, cls.serialize(section))
         return string

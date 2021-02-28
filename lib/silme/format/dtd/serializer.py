@@ -41,18 +41,18 @@ class DTDSerializer:
             string += entity.value
             string += end
         else:
-            string = u"<!ENTITY " + entity.id + u' "' + entity.value + u'">'
+            string = "<!ENTITY " + entity.id + ' "' + entity.value + '">'
         return string
 
     @classmethod
     def dump_entitylist(cls, elist):
-        string = u"".join([cls.dump_entity(entity) + "\n" for entity in elist.values()])
+        string = "".join([cls.dump_entity(entity) + "\n" for entity in elist.values()])
         return string
 
     @classmethod
     def dump_comment(cls, comment):
-        string = u"<!--"
+        string = "<!--"
         for element in comment:
             string += cls.dump_element(element)
-        string += u"-->"
+        string += "-->"
         return string

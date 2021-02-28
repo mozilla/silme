@@ -3,7 +3,7 @@ from silme.core.structure import Blob, Structure
 from silme.core.types import LazyDict
 
 
-class Package(object):
+class Package:
     """
     Package is a container that stores
     set of data structures (Structures, EntityLists, Blobs) and sub-packages.
@@ -30,14 +30,12 @@ class Package(object):
         return len(self._packages) + len(self._structures)
 
     def __iter__(self):
-        for i in self._packages.items():
-            yield i
-        for i in self._structures.items():
-            yield i
+        yield from self._packages.items()
+        yield from self._structures.items()
         raise StopIteration
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__, self.id)
+        return f"{self.__class__.__name__}({self.id})"
 
     def __contains__(self, id):
         if id in self._packages.keys():
@@ -166,7 +164,7 @@ class Package(object):
         if path is True:
             spath = ""
         elif path is not False:
-            spath = "%s/%s" % (path, self.id) if path else self.id
+            spath = f"{path}/{self.id}" if path else self.id
         else:
             spath = path
         if recursive:
@@ -177,7 +175,7 @@ class Package(object):
                 self._structures[i]
             ):
                 elist = self._structures[i].entities()
-                spath2 = "%s/%s" % (spath, i) if spath else i
+                spath2 = f"{spath}/{i}" if spath else i
                 entities.extend([(e, spath2) for e in elist])
         return entities
 
