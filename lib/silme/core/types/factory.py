@@ -1,4 +1,4 @@
-from silme.core.types.odict import OrderedDict
+from collections import OrderedDict
 from silme.core.types import LazyDict as LazyDict
 
 from abc import ABCMeta

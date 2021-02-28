@@ -10,7 +10,7 @@ by subclasses of Entity class, and possibly one of the Value classes.
 By default silme.core.Value returns one of its more specific subclasses.
 """
 import copy
-from silme.core.types.odict import OrderedDict
+from collections import OrderedDict
 
 __all__ = ['is_string', 'string', 'is_entity', 'Entity']
 

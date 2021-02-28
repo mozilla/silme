@@ -2,7 +2,7 @@ import unittest
 import sys
 
 from silme.core.entity import Entity, ComplexValue
-from silme.core.types import OrderedDict
+from collections import OrderedDict
 
 class EntityTestCase(unittest.TestCase):
 
