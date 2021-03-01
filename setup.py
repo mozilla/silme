@@ -1,11 +1,11 @@
-from setuptools import setup, find_packages
-import sys
-import os.path
-
 """Python localization library
 
 New library for localization written in Python.
 """
+
+from setuptools import setup, find_packages
+import sys
+import os.path
 
 docstrings = __doc__.split("\n")
 
