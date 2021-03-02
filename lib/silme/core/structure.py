@@ -21,7 +21,7 @@ from silme.core.list import EntityList
 from functools import partial
 
 
-class Blob(object):
+class Blob:
     """
     A Blob is a data stream that is not localizable, but may be
     a part of a package of structures.
@@ -32,6 +32,7 @@ class Blob(object):
     The main use case for the class is to preserve the non-translatable
     data in a in-memory representation of a package (a directory etc.)
     """
+
     uri = None
     id = None
     source = None
@@ -40,7 +41,7 @@ class Blob(object):
         self.id = id
 
     def __repr__(self):
-        return '%s(%s)' % (self.__class__.__name__, self.id)
+        return f"{self.__class__.__name__}({self.id})"
 
 
 class Structure(list, Blob):
@@ -53,6 +54,7 @@ class Structure(list, Blob):
     edit it, and save it back preserving as much of the file structure as
     possible which in turn may be important for all VCS's based workflows.
     """
+
     _process_cb = None  # process callback function
 
     def __init__(self, id):
@@ -76,7 +78,7 @@ class Structure(list, Blob):
         """
         if type(pos) == tuple:
             p = self.entity_pos(pos[1])
-            return p + 1 if pos[0] == 'after' else p
+            return p + 1 if pos[0] == "after" else p
         elif pos is None:
             return None
         else:
@@ -110,9 +112,9 @@ class Structure(list, Blob):
         return self.entity(id).value
 
     def keys(self):
-        """returns a list of id's of entities from the Structure
-        """
+        """returns a list of id's of entities from the Structure"""
         return [item.id for item in self if isinstance(item, Entity)]
+
     ids = keys
 
     def entities(self):
@@ -122,31 +124,27 @@ class Structure(list, Blob):
         return [item for item in self if is_entity(item)]
 
     def entitylist(self):
-        """Returns an EntityList object with entities from the Structure.
-        """
-        return EntityList(self.id,
-                          *[item for item in self if is_entity(item)])
+        """Returns an EntityList object with entities from the Structure."""
+        return EntityList(self.id, *[item for item in self if is_entity(item)])
 
     def entities_with_path(self, path_prefix):
         """Returns a dict of all entities from the Structure in a form of
         d[entity.id] = (entity, path)
         """
-        spath = '%s/%s' % (path_prefix, self.id) if path_prefix else self.id
-        return dict([(item.id,
-                     (item, spath)) for item in self if is_entity(item)])
+        spath = f"{path_prefix}/{self.id}" if path_prefix else self.id
+        return {item.id: (item, spath) for item in self if is_entity(item)}
 
     def __contains__(self, id):
-        """returns True if an entity with given id exists
-        """
+        """returns True if an entity with given id exists"""
         for item in self:
             if is_entity(item) and item.id == id:
                 return True
         return False
+
     has_entity = __contains__
 
     def modify_entity(self, id, value):
-        """modifies an entity value
-        """
+        """modifies an entity value"""
         found = False
         for item in self:
             if is_entity(item) and item.id == id:
@@ -156,32 +154,29 @@ class Structure(list, Blob):
         if found:
             return True
         else:
-            raise KeyError('No such entity')
+            raise KeyError("No such entity")
 
     def entity(self, id):
-        """returns an entity for a given id
-        """
+        """returns an entity for a given id"""
         for item in self:
             if is_entity(item) and item.id == id:
                 return item
-        raise KeyError('No such entity')
+        raise KeyError("No such entity")
 
     def entity_pos(self, id):
-        """returns the position of an entity in the Structure
-        """
+        """returns the position of an entity in the Structure"""
         for i, item in enumerate(self):
             if is_entity(item) and item.id == id:
                 return i
-        raise KeyError('No such entity')
+        raise KeyError("No such entity")
 
     def remove_entity(self, id):
-        """removes an entity for the given id or raises KeyError
-        """
+        """removes an entity for the given id or raises KeyError"""
         for i, item in enumerate(self):
             if is_entity(item) and item.id == id:
                 del self[i]
                 return True
-        raise KeyError('[%s] No such entity: %s' % (self.id, id))
+        raise KeyError(f"[{self.id}] No such entity: {id}")
 
     def add_comment(self, comment, pos=None):
         self.add_at_pos(comment, pos)
@@ -208,9 +203,9 @@ class Structure(list, Blob):
         elif item is None:
             return 0
         else:
-            raise Exception('Cannot add element of type "' +
-                            type(item).__name__ +
-                            '" to the Structure')
+            raise Exception(
+                f'Cannot add element of type "{type(item).__name__}" to the Structure'
+            )
 
     def add_elements(self, sequence, pos=None):
         """
@@ -226,7 +221,7 @@ class Structure(list, Blob):
         if isinstance(sequence, dict):
             sequence = sequence.values()
         pos = self._get_pos(pos)
-        #a=a[:2]+b+a[2:] ?
+        # a=a[:2]+b+a[2:] ?
         for i in sequence:
             shift += self.add(i, pos=(None if pos is None else pos + shift))
         return shift
@@ -244,7 +239,7 @@ class Structure(list, Blob):
 
             return self._process_cb()
         except TypeError:
-            raise Exception('process callback function not specified')
+            raise Exception("process callback function not specified")
 
     def set_process_cb(self, cb):
         self._process_cb = partial(cb, self)
@@ -263,13 +258,13 @@ class Comment(Structure):
         self.id = None
 
     def __repr__(self):
-        string = '<comment: '
+        string = "<comment: "
         for i in self:
-            string += unicode(i)
-        string += '>'
+            string += str(i)
+        string += ">"
         return string
 
     def add(self, element, pos=None):
         if isinstance(element, Comment):
-            raise Exception('Cannot add a comment to a comment')
+            raise Exception("Cannot add a comment to a comment")
         return Structure.add(self, element, pos)

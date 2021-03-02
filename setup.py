@@ -1,16 +1,17 @@
-"""Python localization library 
+from setuptools import setup, find_packages
+import sys
+import os.path
+
+"""Python localization library
 
 New library for localization written in Python.
 """
 
 docstrings = __doc__.split("\n")
 
-from setuptools import setup, find_packages
-import sys
-import os.path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'lib'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "lib"))
 
-import silme
+import silme  # noqa: E402
 
 classifiers = """\
 Development Status :: 4 - Beta
@@ -27,17 +28,18 @@ Topic :: Software Development :: Libraries :: Python Modules
 Topic :: Software Development :: Localization
 """
 
-setup(name="silme",
-      version=silme.get_short_version(),
-      author="Zbigniew Braniecki",
-      author_email="gandalf@mozilla.com",
-      description=docstrings[0],
-      long_description="\n".join(docstrings[2:]),
-      license="MPL 1.1/GPL 2.0/LGPL 2.1",
-      url="https://github.com/mathjazz/silme",
-      classifiers=filter(None, classifiers.split("\n")),
-      platforms=["any"],
-      package_dir={'': 'lib'},
-      packages=find_packages('lib'),
-      keywords="localization, l10n"
-      )
+setup(
+    name="silme",
+    version=silme.get_short_version(),
+    author="Zbigniew Braniecki",
+    author_email="gandalf@mozilla.com",
+    description=docstrings[0],
+    long_description="\n".join(docstrings[2:]),
+    license="MPL 1.1/GPL 2.0/LGPL 2.1",
+    url="https://github.com/mathjazz/silme",
+    classifiers=filter(None, classifiers.split("\n")),
+    platforms=["any"],
+    package_dir={"": "lib"},
+    packages=find_packages("lib"),
+    keywords="localization, l10n",
+)

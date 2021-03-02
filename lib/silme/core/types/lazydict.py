@@ -1,4 +1,4 @@
-'''
+"""
 LazyDict is a subclass of a dict that can additionally store
 items in a form of a stub that is expanded on the first call.
 
@@ -15,21 +15,22 @@ Example:
 
     d = LazyDict({'a': 1})
     d.set_stub('b', resolver, table='items')
-    
+
     print(len(d))                    # 2
     x = d['b']                       # resolving
     x2 = d['b']                      #
     print(isinstance(x2, QueryValue) # True
 
-'''
+"""
 from functools import partial
 from collections.abc import MutableMapping, ItemsView, ValuesView
-import datetime
 
-__all__ = ["LazyDict",]
+__all__ = [
+    "LazyDict",
+]
+
 
 class LazyItemsView(ItemsView):
-
     def __iter__(self):
         self._mapping.resolve()
         for key in self._mapping:
@@ -37,7 +38,6 @@ class LazyItemsView(ItemsView):
 
 
 class LazyValuesView(ValuesView):
-
     def __iter__(self):
         self._mapping.resolve()
         for key in self._mapping:
@@ -49,34 +49,33 @@ class LazyDict(dict):
 
     def __init__(self, *args, **kwargs):
         self._stubs = set()
-        super(LazyDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __cmp__(self, other):
         self.resolve()
-        return super(LazyDict, self).__cmp__(other)
+        return super().__cmp__(other)
 
     def __eq__(self, other):
         self.resolve()
-        return super(LazyDict, self).__eq__(other)
+        return super().__eq__(other)
 
     def __setitem__(self, key, item):
         self._stubs.discard(key)
-        super(LazyDict, self).__setitem__(key, item)
+        super().__setitem__(key, item)
 
     def __getitem__(self, key):
         if key in self._stubs:
-            super(LazyDict, self).__setitem__(key,
-                                              super(LazyDict, self).__getitem__(key)())
+            super().__setitem__(key, super().__getitem__(key)())
             self._stubs.remove(key)
-        return super(LazyDict, self).__getitem__(key)
+        return super().__getitem__(key)
 
     def __delitem__(self, key):
         self._stubs.discard(key)
-        super(LazyDict, self).__delitem__(key)
+        super().__delitem__(key)
 
     def clear(self):
         self._stubs.clear()
-        super(LazyDict, self).clear()
+        super().clear()
 
     def copy(self):
         x = self.__class__(self)
@@ -89,7 +88,6 @@ class LazyDict(dict):
     setdefault = MutableMapping.setdefault
     __repr__ = MutableMapping.__repr__
 
-
     def items(self):
         return LazyItemsView(self)
 
@@ -97,6 +95,7 @@ class LazyDict(dict):
         return LazyValuesView(self)
 
     __marker = object()
+
     def pop(self, key, default=__marker):
         try:
             value = self[key]
@@ -118,17 +117,15 @@ class LazyDict(dict):
         provided by set_default_resolver.
         """
         self._stubs.add(key)
-        v = partial(rslv if rslv else self._resolver,
-                            key, *args, **kwargs)
-        super(LazyDict, self).__setitem__(key, v)
+        v = partial(rslv if rslv else self._resolver, key, *args, **kwargs)
+        super().__setitem__(key, v)
 
     def resolve(self):
         """
         Resolves all stubs
         """
         for k in self._stubs:
-            super(LazyDict, self).__setitem__(k,
-                    super(LazyDict, self).__getitem__(k)())
+            super().__setitem__(k, super().__getitem__(k)())
         self._stubs.clear()
 
     def set_resolver(self, resolver):
@@ -136,46 +133,3 @@ class LazyDict(dict):
         Sets the default stub resolver
         """
         self._resolver = resolver
-
-
-class LazyDictDebug(LazyDict):
-    """
-    This class can be used instead of LazyDict to analyze if the code
-    base usage make stubs valuable
-    """
-    def __init__(self, *args, **kwargs):
-        super(LazyDictDebug, self).__init__(*args, **kwargs)
-        self.stats = {'realitems': 0, 'stubs': 0, 'resolved': 0}
-        self.timers = {}
-
-    def __missing__(self, key):
-        try:
-            stub = self._stubs.pop(key)
-        except KeyError:
-            raise KeyError(key)
-        s = stub()
-        dict.__setitem__(self, key, s)
-        return s
-
-    def __setitem__(self, key, item):
-        self.stats['realitems'] += 1
-        LazyDict.__setitem__(self, key, item)
-
-    def set_stub(self, key, resolver, *args, **kwargs):
-        self.stats['stubs']+=1
-        LazyDict.set_stub(self, key, resolver, *args, **kwargs)
-
-    def get_stats(self):
-        stats = self.stats
-        if len(self.timers):
-            stats['time_cost'] = sum(self.timers.values(), 0.0) / len(self.timers)
-        return stats
-
-    def __missing__(self, key):
-        self.stats['resolved']+=1
-        t1 = datetime.datetime.now()
-        LazyDict.__missing__(self, key)
-        t2 = datetime.datetime.now()
-        tdiff = t2 - t1
-        self.timers[key] = tdiff.microseconds
-

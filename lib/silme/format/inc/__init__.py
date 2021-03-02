@@ -2,30 +2,30 @@ from .parser import IncParser as Parser
 from .serializer import IncSerializer as Serializer
 
 
-class FormatParser(object):
-    name = 'inc'
+class FormatParser:
+    name = "inc"
     desc = "INC reader/writer"
-    extensions = ['inc']
-    encoding = 'utf_8' # allowed encoding
+    extensions = ["inc"]
+    encoding = "utf_8"  # allowed encoding
     fallback = None
 
     @classmethod
-    def dump_structure (cls, l10nobject):
+    def dump_structure(cls, l10nobject):
         text = Serializer.serialize(l10nobject)
         return text
 
     @classmethod
-    def dump_entitylist (cls, elist):
+    def dump_entitylist(cls, elist):
         text = Serializer.dump_entitylist(elist)
         return text
 
     @classmethod
-    def get_entitylist (cls, text):
+    def get_entitylist(cls, text):
         l10nobject = Parser.parse_to_entitylist(text)
         return l10nobject
 
     @classmethod
-    def get_structure (cls, text):
+    def get_structure(cls, text):
         l10nobject = Parser.parse(text)
         return l10nobject
 

@@ -2,11 +2,12 @@ from silme.core.list import is_entitylist
 from silme.core.structure import Blob, Structure
 from silme.core.types import LazyDict
 
-class Package(object):
+
+class Package:
     """
     Package is a container that stores
     set of data structures (Structures, EntityLists, Blobs) and sub-packages.
-    
+
     It's easiest to think of it as a filesystem directory that
     can store files and nested directories.
     It abstracts the package from the file system, so once you load
@@ -16,6 +17,7 @@ class Package(object):
     If you load a directory into memory and then serialize it back to disk,
     the two directories should be identical minus any modifications you made.
     """
+
     uri = None
 
     def __init__(self, id, lazy=True):
@@ -25,17 +27,15 @@ class Package(object):
         self.id = id
 
     def __len__(self):
-        return len(self._packages)+len(self._structures)
+        return len(self._packages) + len(self._structures)
 
     def __iter__(self):
-        for i in self._packages.items():
-            yield i
-        for i in self._structures.items():
-            yield i
+        yield from self._packages.items()
+        yield from self._structures.items()
         raise StopIteration
 
     def __repr__(self):
-        return '%s(%s)' % (self.__class__.__name__, self.id)
+        return f"{self.__class__.__name__}({self.id})"
 
     def __contains__(self, id):
         if id in self._packages.keys():
@@ -73,10 +73,10 @@ class Package(object):
     def add_structure(self, struct, path=None):
         """
         Adds a structure to the Package.
-        
+
         Optional parameter path allows to define exact position
         inside the package where the structure should be added.
-        
+
         For example l10npack.add_structure(l10nstruct, 'pkg1/pkg2') is equal to
         l10npack.get_package('pkg1').get_package('pkg2').add_structure(l10nstruct)
         with the difference that it will create missing sub packages if needed.
@@ -84,22 +84,21 @@ class Package(object):
         if not path:
             self._structures[struct.id] = struct
         else:
-            path = path.split('/')
+            path = path.split("/")
             if path[0] in self._packages:
-                self._packages[path[0]].add_structure(struct,
-                                                      '/'.join(path[1:]))
+                self._packages[path[0]].add_structure(struct, "/".join(path[1:]))
             else:
                 sub_l10n_pack = Package(path[0])
                 self.add_package(sub_l10n_pack)
-                sub_l10n_pack.add_structure(struct, '/'.join(path[1:]))
+                sub_l10n_pack.add_structure(struct, "/".join(path[1:]))
 
     def add_package(self, package, path=None):
         """
         Adds a package to Package.
-        
+
         Optional parameter path allows to declare place
         inside the package where the subpackage should be added.
-        
+
         For example l10npack.add_package(subl10npack, 'pkg1/pkg2') is similar to
         l10npack.get_package('pkg1').get_package('pkg2').add_package(subl10npack)
         with the difference that it will create missing sub packages.
@@ -107,14 +106,13 @@ class Package(object):
         if not path:
             self._packages[package.id] = package
         else:
-            path = path.split('/')
+            path = path.split("/")
             if path[0] in self._packages:
-                self._packages[path[0]].add_package(package,
-                                                    '/'.join(path[1:]))
+                self._packages[path[0]].add_package(package, "/".join(path[1:]))
             else:
                 sub_l10n_pack = Package(path[0])
                 self._packages[path[0]] = sub_l10n_pack
-                sub_l10n_pack.add_package(package, '/'.join(path[1:]))
+                sub_l10n_pack.add_package(package, "/".join(path[1:]))
 
     def packages(self, ids=False):
         """
@@ -127,28 +125,28 @@ class Package(object):
         else:
             return list(self._packages.values())
 
-    def structures(self, type='all', ids=False):
+    def structures(self, type="all", ids=False):
         """
         Returns a list of structures inside Package.
         If parameter ids is set to True list of
         names is returned instead of structures.
         """
-        if type == 'all':
+        if type == "all":
             if ids:
                 return list(self._structures.keys())
             else:
                 return list(self._structures.values())
         else:
             l10n_structures = {}
-            if type == 'list':
+            if type == "list":
                 type = is_entitylist
-            elif type == 'structure':
-                type = lambda x:isinstance(x, Structure)
-            elif type == 'blob':
-                type = lambda x:isinstance(x, Blob)
+            elif type == "structure":
+                type = lambda x: isinstance(x, Structure)
+            elif type == "blob":
+                type = lambda x: isinstance(x, Blob)
             for struct in self._structures:
                 if type(self._structures[struct]):
-                    l10n_structures[struct] = self._structures[struct] 
+                    l10n_structures[struct] = self._structures[struct]
             if ids:
                 return list(l10n_structures.keys())
             else:
@@ -157,26 +155,27 @@ class Package(object):
     def entities(self, recursive=True, path=False):
         """
         Returns a list of all entities inside the Package
-        
+
         If optional parameter recursive is set to True it will
         return all packages from this package and its subpackages.
         """
         entities = []
-        
-        
+
         if path is True:
-            spath = ''
+            spath = ""
         elif path is not False:
-            spath='%s/%s' % (path, self.id) if path else self.id
+            spath = f"{path}/{self.id}" if path else self.id
         else:
             spath = path
         if recursive:
             for pack in self._packages.values():
                 entities.extend(pack.entities(path=spath))
         for i in self._structures:
-            if isinstance(self._structures[i], Structure) or is_entitylist(self._structures[i]):
+            if isinstance(self._structures[i], Structure) or is_entitylist(
+                self._structures[i]
+            ):
                 elist = self._structures[i].entities()
-                spath2 = '%s/%s' % (spath, i) if spath else i
+                spath2 = f"{spath}/{i}" if spath else i
                 entities.extend([(e, spath2) for e in elist])
         return entities
 
@@ -190,32 +189,32 @@ class Package(object):
         try:
             return self._structures[id]
         except KeyError:
-            raise KeyError('No such structure: %s' % id)
-        
+            raise KeyError("No such structure: %s" % id)
+
     def package(self, id):
         try:
             return self._packages[id]
         except KeyError:
-            raise KeyError('No such package: %s' % id)
+            raise KeyError("No such package: %s" % id)
 
     def element(self, path):
         """
         Returns an element from inside Package
         by its path.
-        
+
         l10npack.element('pkg1/pkg2/structure.po') will return
         the same as
         l10npack.package('pkg1').get_package('pkg2').structure('structure.po')
-        
+
         If the path is empty the result will be None
         """
         if not path:
             return None
-        elems = path.split('/')
+        elems = path.split("/")
         if len(elems) == 0:
             return None
 
-        if len(elems) == 2 and elems[1] == '':
+        if len(elems) == 2 and elems[1] == "":
             elems = elems[:-1]
 
         if len(elems) == 1:
@@ -230,13 +229,13 @@ class Package(object):
             return None
         else:
             try:
-                return self._packages[elems[0]].element('/'.join(elems[1:]))
+                return self._packages[elems[0]].element("/".join(elems[1:]))
             except KeyError:
                 raise
 
     def remove_structure(self, id):
         del self._structures[id]
-        
+
     def remove_package(self, id):
         del self._packages[id]
 

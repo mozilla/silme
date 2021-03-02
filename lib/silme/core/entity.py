@@ -10,27 +10,16 @@ by subclasses of Entity class, and possibly one of the Value classes.
 By default silme.core.Value returns one of its more specific subclasses.
 """
 import copy
-from silme.core.types.odict import OrderedDict
+from collections import OrderedDict
 
-__all__ = ['is_string', 'string', 'is_entity', 'Entity']
+__all__ = ["is_string", "is_entity", "Entity"]
 
-try:
-    basestring
-    string = unicode
 
-    def is_string(v):
-        """
-        Tests if the argument is a string
-        """
-        return isinstance(v, basestring)
-except:
-    string = str
-
-    def is_string(v):
-        """
-        Tests if the argument is a string
-        """
-        return isinstance(v, str)
+def is_string(v):
+    """
+    Tests if the argument is a string
+    """
+    return isinstance(v, str)
 
 
 def is_entity(v):
@@ -40,9 +29,9 @@ def is_entity(v):
     return isinstance(v, Entity)
 
 
-class Value(object):
+class Value:
     def __new__(cls, *args, **kwargs):
-        #if cls is not Value:
+        # if cls is not Value:
         #    return object.__new__(cls)
         try:
             i = args[0]
@@ -60,24 +49,26 @@ class Value(object):
                 return ComplexValue(*args, **kwargs)
 
 
-class SimpleValue(string, Value):
+class SimpleValue(str, Value):
     """
     A simple, string based value for an entity
     """
+
     def get(self, *args, **kwargs):
         return self
 
     def __setitem__(self, key, value):
-        raise TypeError("'%s' object does not support item assignment" %
-                        type(self).__name__)
+        raise TypeError(
+            "'%s' object does not support item assignment" % type(self).__name__
+        )
 
     def __getitem__(self, key):
-        raise TypeError("'%s' object is unsubscriptable" %
-                        type(self).__name__)
+        raise TypeError("'%s' object is unsubscriptable" % type(self).__name__)
 
     def __delitem__(self, key):
-        raise TypeError("'%s' object does not support item deletion" %
-                        type(self).__name__)
+        raise TypeError(
+            "'%s' object does not support item deletion" % type(self).__name__
+        )
 
 
 class ComplexValue(Value):
@@ -103,6 +94,7 @@ class ComplexValue(Value):
         else:
             return val
 
+
 class ListValue(list, ComplexValue):
     """
     A value that is a list of values
@@ -116,19 +108,21 @@ class DictValue(OrderedDict, ComplexValue):
     """
     A value that is a dictionary of values
     """
+
     def get(self, key=None, *args, **kwargs):
         if key is not None:
             return self[key]
         return list(self.values())[0]
 
 
-class Entity(object):
+class Entity:
     """
     An entity is a basic localization data unit with a unique id and a value
 
     An ID represents a handler which a developer uses to call for the given
     entity and a value is any sort of localizable data bound to that id.
     """
+
     _select_value = None
 
     def __init__(self, id, value=None):
@@ -181,4 +175,3 @@ class Entity(object):
     @property
     def values(self):
         return copy.copy(self._value)
-

@@ -22,11 +22,12 @@ class EntityList(ComplexDict):
     """
     EntityList is a list of entities bundled together.
     """
+
     uri = None
 
     def __init__(self, id, *args, **kwargs):
         self.id = id
-        super(EntityList, self).__init__()
+        super().__init__()
         for i in args:
             if is_entitylist(i):
                 for entity in i.entities():
@@ -36,8 +37,8 @@ class EntityList(ComplexDict):
 
     def __repr__(self):
         if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, tuple(self.keys()))
+            return f"{self.__class__.__name__}()"
+        return "{}({!r})".format(self.__class__.__name__, tuple(self.keys()))
 
     def add(self, entity):
         """Adds new entity to EntityList"""
@@ -54,8 +55,7 @@ class EntityList(ComplexDict):
         return list(self.values())
 
     def value(self, id):
-        """Returns entity value from EntityList.
-        """
+        """Returns entity value from EntityList."""
         return self[id].value
 
 
@@ -64,8 +64,9 @@ class ValueList(EntityList):
     ValueList is a list of entity values - similar to EntityList but with an
     intention to store only the values of entities.
     """
+
     def __init__(self, id, *args, **kwargs):
-        super(ValueList, self).__init__(id, *args, **kwargs)
+        super().__init__(id, *args, **kwargs)
 
     def add(self, entity):
         """Adds new entity to the ValueList"""
@@ -79,8 +80,9 @@ class ValueList(EntityList):
 
     def entities(self):
         """Raises a TypeError since ValueList does not support this method"""
-        raise TypeError("'%s' object does not support entities method" %
-                        type(self).__name__)
+        raise TypeError(
+            "'%s' object does not support entities method" % type(self).__name__
+        )
 
     def value(self, id):
         """Returns entity value from the ValueList
