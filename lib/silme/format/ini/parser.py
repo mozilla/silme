@@ -6,7 +6,7 @@ import re
 class Parser:
     patterns = {}
     patterns["entity"] = re.compile(
-        r"^[ \t]*([^#!\s\n][^=:\n]*?)[ \t]*[:=][ \t]*(.*?)(?<!\\\)(?=\n|\Z)",
+        "^[ \t]*([^#!\s\n][^=:\n]*?)[ \t]*[:=][ \t]*(.*?)(?<!\\\)(?=\n|\Z)",
         re.S | re.M,
     )
     patterns["comment"] = re.compile(r"^([;#][^\n]*\n?)+", re.M | re.S)
