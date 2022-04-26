@@ -1,4 +1,4 @@
-VERSION = (0, 11, 0, "", 0)
+VERSION = (0, 11, 1, "", 0)
 
 short_names = {"alpha": "a", "beta": "b", "pre": "pre", "final": "", "rc": "rc"}
 
